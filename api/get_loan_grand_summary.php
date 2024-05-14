@@ -15,5 +15,5 @@ $db = $database->getConnection();
 
 $famloan = new FamLoan($db);
 
-
-$stmnt = $famloan->getTotalLoan();
+echo "test";
+// $stmnt = $famloan->getGrandSummary();
