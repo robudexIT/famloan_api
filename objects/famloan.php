@@ -52,6 +52,44 @@ class Famloan {
          }
 
     }
+
+  public function getLoanDetails(){
+      //build query
+      $query = "SELECT amount FROM ".$this->loan_table." ";
+
+      //prepare the query
+
+      $stmnt = $this->conn->prepare($query);
+
+     
+
+      $stmnt->execute();
+
+      $num = $stmnt->rowCount();
+      $loan_array = array();
+      if($num != 0){
+            while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+
+              $loan = array(
+                "id" => $row['id'],
+                "name" => $row['name'],
+                "amount" =>$row['amount']
+
+              );
+              array_push($loan_array, $loan);
+            }
+            echo json_encode($loan_array);
+        
+      }
+    else {
+      echo json_encode("No loans details");
+    }  
+
+       
+
+  }  
+
+
   public function getBreakdownSummary(){
        //build query
 
@@ -134,6 +172,43 @@ class Famloan {
 
   }
 
+  public function getMamaBreakdownSummary(){
+    //build query
+
+    $query = "SELECT amount FROM ".$this->loan_table." WHERE name='Geda'";
+
+    //prepare the query
+
+    $stmnt = $this->conn->prepare($query);
+
+     
+     
+
+     $stmnt->execute();
+
+     $num = $stmnt->rowCount();
+     $loan_array = array();
+     if($num != 0){
+            while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+
+              array_push($loan_array,$row['amount']);
+            }
+         
+         $result = $this->validate_and_total($loan_array);
+         if(!$result) {
+          echo json_encode(array("message" => "The array contains non-numeric values."));
+         }elseif (is_numeric($result)){
+          //divide by 8 family members
+         
+          $payermama = $this->get_payermama($result);
+          echo json_encode($payermama);
+         }
+        }else{
+        echo json_encode(array("message" => "No Records Found"));
+     }
+
+}  
+
   private function get_payermembers($pershareammount){
        //build query
        $query = "SELECT * FROM ".$this->payer_table." WHERE name NOT IN ('Gloria Bulaclac')";
@@ -171,6 +246,45 @@ class Famloan {
       }  
 
   }
+
+  private function get_payermama($pershareammount){
+    //build query
+    $query = "SELECT * FROM ".$this->payer_table." WHERE name= 'Gloria Bulaclac'";
+
+
+
+
+    //prepare the query
+
+    $stmnt = $this->conn->prepare($query);
+
+     $stmnt->execute();
+
+     $num = $stmnt->rowCount();
+     $payermember_array = array();
+     if($num != 0){
+            while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+
+             $member = array(
+               "id" => $row['id'],
+               "name" => $row['name'],
+               "alias" =>$row['alias'],
+               "shared_debts" => $pershareammount,
+               "total_paid" => $this->getTotalPayerPaid($row['id']),
+               "remaining_balance" => $pershareammount - $this->getTotalPayerPaid($row['id'])
+
+             );
+           array_push($payermember_array, $member);
+            }
+         
+       return $payermember_array;
+     }
+   else {
+     return false;
+   }  
+
+}
+
 
   private function getTotalPayerPaid($id){
         $query = "SELECT SUM(payment_breakdown.amount) as total_paid
