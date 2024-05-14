@@ -52,6 +52,39 @@ class Famloan {
          }
 
     }
+  public function getBreakdownSummary(){
+       //build query
+
+       $query = "SELECT amount FROM ".$this->loan_table." WHERE name NOT IN ('Geda','Carloan')";
+
+       //prepare the query
+
+       $stmnt = $this->conn->prepare($query);
+
+        
+        
+
+        $stmnt->execute();
+
+        $num = $stmnt->rowCount();
+        $loan_array = array();
+        if($num != 0){
+               while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+
+                 array_push($loan_array,$row['amount']);
+               }
+            
+            $result = $this->validate_and_total($loan_array);
+            if(!$result) {
+             echo json_encode(array("message" => "The array contains non-numeric values."));
+            }elseif (is_numeric($result)){
+             echo json_encode(array("resut" => "$result"));
+            }
+           }else{
+           echo json_encode(array("message" => "No Records Found"));
+        }
+
+  }  
   private function validate_and_total($array){
     foreach($array as $val){
 

@@ -16,4 +16,4 @@ $db = $database->getConnection();
 $famloan = new FamLoan($db);
 
 
-$stmnt = $famloan->getBreakdownSummary();
+$stmnt = $famloan->getTotalLoan();
