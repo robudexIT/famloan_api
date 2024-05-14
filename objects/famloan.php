@@ -5,7 +5,7 @@ class Famloan {
 	//FamLoan class properties
 	private $loan_table = "loan";
 	private $payer_table = "payer";
-    private $breakdown_table = "payment_breakdown";
+  private $breakdown_table = "payment_breakdown";
  
 
 
@@ -74,7 +74,7 @@ class Famloan {
    
   private function getTotalPaid(){
          //build query
-         $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->$breakdown_table." ";
+         $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." ";
 
          //prepare the query
  
