@@ -112,7 +112,8 @@ class Famloan {
 		            	"name" => $row['name'],
 		            	"alias" =>$row['alias'],
 		            	"shared_debts" => $pershareammount,
-                  "total_paid" => $this->getTotalPayerPaid($row['id'])
+                  "total_paid" => $this->getTotalPayerPaid($row['id']),
+                  "remaining_balance" = $pershareammount- $this->getTotalPayerPaid($row['id'])
 
 		            );
             	array_push($payermember_array, $member);
@@ -142,6 +143,10 @@ class Famloan {
         $stmnt->execute();
         
         $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+
+        if($row['total_paid'] == null) {
+          return 0;
+        };
         return $row['total_paid'];
 
   }
