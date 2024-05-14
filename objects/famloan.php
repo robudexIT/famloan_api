@@ -78,13 +78,50 @@ class Famloan {
             if(!$result) {
              echo json_encode(array("message" => "The array contains non-numeric values."));
             }elseif (is_numeric($result)){
-             echo json_encode(array("resut" => "$result"));
+             //divide by 8 family members
+             $pershareammount = $result / 8;
+             $payermembers = $this->get_payermembers($pershareammount);
+             echo json_encode($payermembers);
             }
            }else{
            echo json_encode(array("message" => "No Records Found"));
         }
 
   }  
+
+  private function get_payermembers($pershareammount){
+       //build query
+       $query = "SELECT * FROM ".$this->payer_table." WHERE name NOT IN ('Gloria Bulaclac')";
+
+       //prepare the query
+
+       $stmnt = $this->conn->prepare($query);
+
+        $stmnt->execute();
+
+        $num = $stmnt->rowCount();
+        $payermember_array = array();
+        if($num != 0){
+               while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+
+                $member = array(
+		            	"id" => $row['id'],
+		            	"name" => $row['name'],
+		            	"alias" =>$row['alias'],
+		            	"pershare_amount" => $pershareammount
+
+		            );
+            	array_push($payermember_array, $member);
+               }
+            
+          return $payermember_array;
+        }
+      else {
+        return false;
+      }  
+
+  }
+
   private function validate_and_total($array){
     foreach($array as $val){
 
