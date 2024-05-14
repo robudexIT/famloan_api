@@ -21,14 +21,14 @@ class Famloan {
 
   public function getGrandSummary(){
   
-   echo $this->getTotalLoan();
-    // $summary = array(
-    //    'total_loan' => $this->getTotalLoan(),
-    //    'total_paid' => $this->getTotalPaid(),
-    //    'remainbalance' =>  $this->getTotalLoan() -  $this->getTotalPaid()
+  
+    $summary = array(
+       'total_loan' => $this->getTotalLoan(),
+       'total_paid' => $this->getTotalPaid(),
+       'remainbalance' =>  $this->getTotalLoan() -  $this->getTotalPaid()
 
-    // );
-    // echo json_encode($summary); 
+    );
+    echo json_encode($summary); 
     
   }
 
