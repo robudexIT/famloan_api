@@ -89,6 +89,51 @@ class Famloan {
 
   }  
 
+  public function getPayerPaymentDetails($payer_id){
+          $query = "SELECT 
+                      payer.id AS payer_id, 
+                      payer.name AS payer_name, payer.alias AS payer_alias, 
+                      payment_breakdown.amount AS paid_amount,
+                      payment_breakdown.date AS paid_date
+                  FROM 
+                    payer 
+                  INNER JOIN 
+                    payment_breakdown 
+                ON 
+                    payer.id = payment_breakdown.payer_id 
+                WHERE 
+                    payer.id = $payer_id";
+          //prepare the query
+
+          $stmnt = $this->conn->prepare($query);
+
+          $stmnt->execute();
+
+          $num = $stmnt->rowCount();
+          $payermember_array = array();
+          if($num != 0){
+                while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+
+                  $member = array(
+                    "id" => $row['payer_id'],
+                    "name" => $row['payer_name'],
+                    "alias" =>$row['payer_alias'],
+                    "paid_amount" => $row['paid_amount'],
+                    "paid_date" => $row['paid_date']
+
+                  );
+                  array_push($payermember_array, $member);
+                }
+                echo json_encode($payermember_array);
+            
+          }
+        else {
+          echo json_encode("No payment details");
+        }  
+
+
+  }
+
   private function get_payermembers($pershareammount){
        //build query
        $query = "SELECT * FROM ".$this->payer_table." WHERE name NOT IN ('Gloria Bulaclac')";
