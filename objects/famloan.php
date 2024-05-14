@@ -93,6 +93,9 @@ class Famloan {
        //build query
        $query = "SELECT * FROM ".$this->payer_table." WHERE name NOT IN ('Gloria Bulaclac')";
 
+  
+  
+
        //prepare the query
 
        $stmnt = $this->conn->prepare($query);
@@ -108,7 +111,8 @@ class Famloan {
 		            	"id" => $row['id'],
 		            	"name" => $row['name'],
 		            	"alias" =>$row['alias'],
-		            	"pershare_amount" => $pershareammount
+		            	"shared_debts" => $pershareammount,
+                  "total_paid" => $this->getTotalPayerPaid($row['id'])
 
 		            );
             	array_push($payermember_array, $member);
@@ -119,6 +123,26 @@ class Famloan {
       else {
         return false;
       }  
+
+  }
+
+  private function getTotalPayerPaid($id){
+        $query = "SELECT SUM(payment_breakdown.amount) as total_paid
+               FROM 
+                payer
+              LEFT JOIN 
+                payment_breakdown
+              ON 
+              payer.id = payment_breakdown.payer_id
+             WHERE 
+               payer.id = $id;";
+
+        $stmnt = $this->conn->prepare($query);
+
+        $stmnt->execute();
+        
+        $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+        return $row['total_paid'];
 
   }
 
