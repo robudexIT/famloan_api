@@ -45,9 +45,8 @@ class Famloan {
              if(!$result) {
               echo json_encode(array("message" => "The array contains non-numeric values."));
              }elseif (is_numeric($result)){
-              echo json_encode(array("resut" => $result));
+              echo json_encode(array("resut" => "$result"));
              }
-             echo json_encode($loan_array);
             }else{
             echo json_encode(array("message" => "No Records Found"));
          }
