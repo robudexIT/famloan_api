@@ -5,7 +5,7 @@ class Famloan {
 	//FamLoan class properties
 	private $loan_table = "loan";
 	private $payer_table = "payer";
-    private $breakdown_table = "payment_breakdonw";
+    private $breakdown_table = "payment_breakdown";
  
 
 
@@ -24,8 +24,8 @@ class Famloan {
   
     $summary = array(
        "total_loan" => $this->getTotalLoan(),
-       "total_paid" => $this->getTotalPaid()
-      //  "remainbalance" =>  $this->getTotalLoan() -  $this->getTotalPaid()
+       "total_paid" => $this->getTotalPaid(),
+       "remainbalance" =>  $this->getTotalLoan() -  $this->getTotalPaid()
 
     );
     echo json_encode($summary); 
