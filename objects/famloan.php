@@ -113,7 +113,7 @@ class Famloan {
 		            	"alias" =>$row['alias'],
 		            	"shared_debts" => $pershareammount,
                   "total_paid" => $this->getTotalPayerPaid($row['id']),
-                  "remaining_balance" = $pershareammount- $this->getTotalPayerPaid($row['id'])
+                  "remaining_balance" => $pershareammount - $this->getTotalPayerPaid($row['id'])
 
 		            );
             	array_push($payermember_array, $member);
