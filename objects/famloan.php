@@ -23,9 +23,9 @@ class Famloan {
   
   
     $summary = array(
-       "total_loan" => $this->getTotalLoan(),
-       "total_paid" => $this->getTotalPaid(),
-       "remainbalance" =>  $this->getTotalLoan() -  $this->getTotalPaid()
+       "total_loan" => $this->getTotalLoan()
+      //  "total_paid" => $this->getTotalPaid(),
+      //  "remainbalance" =>  $this->getTotalLoan() -  $this->getTotalPaid()
 
     );
     echo json_encode($summary); 
