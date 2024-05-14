@@ -20,23 +20,21 @@ class Famloan {
     }
 
   public function getGrandSummary(){
-    $totaloan = $this->getTotalLoan();
-    $totalpaid = $this->getTotalPaid();
-    $remaingbalance = $totaloan - $totalpaid; 
    
-    $summary = array(
-       'total_loan' => $this->getTotalLoan(),
-       'total_paid' => $this->getTotalPaid(),
-       'remainbalance' =>  $this->getTotalLoan() -  $this->getTotalPaid()
+   echo $this->getTotalLoan();
+    // $summary = array(
+    //    'total_loan' => $this->getTotalLoan(),
+    //    'total_paid' => $this->getTotalPaid(),
+    //    'remainbalance' =>  $this->getTotalLoan() -  $this->getTotalPaid()
 
-    );
-    echo json_encode($summary); 
+    // );
+    // echo json_encode($summary); 
     
   }
 
   private function getTotalLoan() {
         //build query
-        $query = "SELECT SUM(amount) totalLoan FROM ".$this->loan_table." ";
+        $query = "SELECT SUM(amount) AS totalLoan FROM ".$this->loan_table." ";
 
         //prepare the query
 
