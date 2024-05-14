@@ -20,7 +20,7 @@ class Famloan {
     }
 
   public function getGrandSummary(){
-   echo "test";
+   echo "testme";
   //  echo $this->getTotalLoan();
     // $summary = array(
     //    'total_loan' => $this->getTotalLoan(),
