@@ -19,10 +19,24 @@ class Famloan {
     	$this->conn = $db;
     }
 
-  
-  public function getTotalLoan() {
+  public function getGrandSummary(){
+    $totaloan = $this->getTotalLoan();
+    $totalpaid = $this->getTotalPaid();
+    $remaingbalance = $totaloan - $totalpaid; 
+   
+    $summary = array(
+       'total_loan' => $this->getTotalLoan(),
+       'total_paid' => $this->getTotalPaid(),
+       'remainbalance' =>  $this->getTotalLoan() -  $this->getTotalPaid()
+
+    );
+    echo json_encode($summary); 
+    
+  }
+
+  private function getTotalLoan() {
         //build query
-        $query = "SELECT amount FROM ".$this->loan_table." ";
+        $query = "SELECT SUM(amount) totalLoan FROM ".$this->loan_table." ";
 
         //prepare the query
 
@@ -36,22 +50,65 @@ class Famloan {
          $num = $stmnt->rowCount();
          $loan_array = array();
          if($num != 0){
-                while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+            //     while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
 
-                  array_push($loan_array,$row['amount']);
-                }
+            //       array_push($loan_array,$row['amount']);
+            //     }
              
-             $result = $this->validate_and_total($loan_array);
-             if(!$result) {
-              echo json_encode(array("message" => "The array contains non-numeric values."));
-             }elseif (is_numeric($result)){
-              echo json_encode(array("resut" => "$result"));
-             }
-            }else{
-            echo json_encode(array("message" => "No Records Found"));
+            //  $result = $this->validate_and_total($loan_array);
+            //  if(!$result) {
+            //   echo json_encode(array("message" => "The array contains non-numeric values."));
+            //  }elseif (is_numeric($result)){
+            //   echo json_encode(array("resut" => "$result"));
+            //  }
+            // }else{
+            // echo json_encode(array("message" => "No Records Found"));
+
+            $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+
+            return $row['totalLoan'];
+
+         }else {
+          return 0;
          }
 
     }
+   
+  private function getTotalPaid(){
+         //build query
+         $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->$breakdown_table." ";
+
+         //prepare the query
+ 
+         $stmnt = $this->conn->prepare($query);
+ 
+          
+          
+ 
+          $stmnt->execute();
+ 
+          $num = $stmnt->rowCount();
+          $loan_array = array();
+          if($num != 0){
+            //      while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+ 
+            //        array_push($loan_array,$row['totalPaid']);
+            //      }
+              
+            //   $result = $this->validate_and_total($loan_array);
+            //   if(!$result) {
+            //    echo json_encode(array("message" => "The array contains non-numeric values."));
+            //   }elseif (is_numeric($result)){
+            //    echo json_encode(array("resut" => "$result"));
+            //   }
+            //  }else{
+            //  echo json_encode(array("message" => "No Records Found"));
+            $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+            return $row['totalPaid'];
+          }else {
+            return 0;
+          }
+  }  
 
   public function getLoanDetails(){
       //build query
