@@ -108,9 +108,9 @@ class Famloan {
           }
   }  
 
-  public function getLoanDetails(){
+  public function getLoanBreakDownSummary(){
       //build query
-      $query = "SELECT amount FROM ".$this->loan_table." ";
+      $query = "SELECT * FROM ".$this->loan_table." ";
 
       //prepare the query
 
