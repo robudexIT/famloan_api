@@ -41,11 +41,26 @@ class Famloan {
                   array_push($loan_array,$row['amount']);
                 }
              
+             $result = $this->validate_and_total($loan_array);
+             if(!$result) {
+              echo json_encode(array("message" => "The array contains non-numeric values."));
+             }elseif (is_numeric($result)){
+              echo json_encode(array("resut" => $result));
+             }
              echo json_encode($loan_array);
             }else{
             echo json_encode(array("message" => "No Records Found"));
          }
 
     }
+  private function validate_and_total($array){
+    foreach($array as $val){
 
+      // check if the value is not a numeric value 
+      if(!is_numeric($val)) {
+        return false ;
+      }
+    }
+    return array_sum($array);
+  }  
 }  
