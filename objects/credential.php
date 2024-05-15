@@ -24,6 +24,7 @@ class Credential {
             FROM " . $this->logintable . "
             WHERE username = ?
             LIMIT 0,1";
+           
 
         // prepare the query
         $stmt = $this->conn->prepare($query);
@@ -35,7 +36,7 @@ class Credential {
 
         
         
-        $stmt->bindParam(1, $this->extension);
+        $stmt->bindParam(1, $this->username);
 
         //execute
 
