@@ -35,7 +35,7 @@ $data = json_decode(file_get_contents("php://input"));
 //$data->secret = "20006336";
 
 //set properties
-$userlogin->extension = $data->extension;
+$userlogin->username = $data->username;
 
 $checkUser = $userlogin->checkUser();
 
@@ -46,11 +46,9 @@ if($checkUser && ($userlogin->secret === $data->secret )){
        "iat" => $iat,
        "nbf" => $nbf,
        "data" => array(
-           "extension" => $userlogin->extension,
-           "name" => $userlogin->name,
-           "position" => $userlogin->position,
-           "blended" =>  $userlogin->blended,
-           "calltype" => $userlogin->calltype
+           "username" => $userlogin->username,
+           "name" => $userlogin->name
+
        )
     );
 
