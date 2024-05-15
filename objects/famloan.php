@@ -276,7 +276,7 @@ class Famloan {
 		            	"shared_debts" => $pershareammount,
                   "total_paid" => $total_paid,
                   "remaining_balance" => $remaining_balance,
-                  'receivable' => $receivable
+                  "receivable" => $receivable
 
 		            );
             	array_push($payermember_array, $member);
