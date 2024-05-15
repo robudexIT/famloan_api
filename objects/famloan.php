@@ -32,81 +32,6 @@ class Famloan {
     
   }
 
-  private function getTotalLoan() {
-        //build query
-        $query = "SELECT SUM(amount) AS totalLoan FROM ".$this->loan_table." ";
-
-        //prepare the query
-
-        $stmnt = $this->conn->prepare($query);
-
-         
-         
-
-         $stmnt->execute();
-
-         $num = $stmnt->rowCount();
-         $loan_array = array();
-         if($num != 0){
-            //     while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
-
-            //       array_push($loan_array,$row['amount']);
-            //     }
-             
-            //  $result = $this->validate_and_total($loan_array);
-            //  if(!$result) {
-            //   echo json_encode(array("message" => "The array contains non-numeric values."));
-            //  }elseif (is_numeric($result)){
-            //   echo json_encode(array("resut" => "$result"));
-            //  }
-            // }else{
-            // echo json_encode(array("message" => "No Records Found"));
-
-            $row = $stmnt->fetch(PDO::FETCH_ASSOC);
-
-            return $row['totalLoan'];
-
-         }else {
-          return 0;
-         }
-
-    }
-   
-  private function getTotalPaid(){
-         //build query
-         $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." ";
-
-         //prepare the query
- 
-         $stmnt = $this->conn->prepare($query);
- 
-          
-          
- 
-          $stmnt->execute();
- 
-          $num = $stmnt->rowCount();
-          $loan_array = array();
-          if($num != 0){
-            //      while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
- 
-            //        array_push($loan_array,$row['totalPaid']);
-            //      }
-              
-            //   $result = $this->validate_and_total($loan_array);
-            //   if(!$result) {
-            //    echo json_encode(array("message" => "The array contains non-numeric values."));
-            //   }elseif (is_numeric($result)){
-            //    echo json_encode(array("resut" => "$result"));
-            //   }
-            //  }else{
-            //  echo json_encode(array("message" => "No Records Found"));
-            $row = $stmnt->fetch(PDO::FETCH_ASSOC);
-            return $row['totalPaid'];
-          }else {
-            return 0;
-          }
-  }  
 
   public function getLoanBreakDownSummary(){
       //build query
@@ -145,7 +70,7 @@ class Famloan {
   }  
 
 
-  public function getBreakdownSummary(){
+  public function getPayerBreakdownSummary(){
        //build query
 
        $query = "SELECT amount FROM ".$this->loan_table." WHERE name NOT IN ('Geda','Carloan')";
@@ -173,7 +98,7 @@ class Famloan {
             }elseif (is_numeric($result)){
              //divide by 8 family members
              $pershareammount = $result / 8;
-             $payermembers = $this->get_payermembers($pershareammount);
+             $payermembers = $this->getPayermembers($pershareammount);
              echo json_encode($payermembers);
             }
            }else{
@@ -264,7 +189,59 @@ class Famloan {
 
 }  
 
-  private function get_payermembers($pershareammount){
+    private function getTotalLoan() {
+      //build query
+      $query = "SELECT SUM(amount) AS totalLoan FROM ".$this->loan_table." ";
+
+      //prepare the query
+
+      $stmnt = $this->conn->prepare($query);
+
+      
+      
+
+      $stmnt->execute();
+
+      $num = $stmnt->rowCount();
+      $loan_array = array();
+      if($num != 0){
+
+          $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+
+          return $row['totalLoan'];
+
+      }else {
+        return 0;
+      }
+
+    }
+
+    private function getTotalPaid(){
+      //build query
+      $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." ";
+
+      //prepare the query
+
+      $stmnt = $this->conn->prepare($query);
+
+        
+        
+
+        $stmnt->execute();
+
+        $num = $stmnt->rowCount();
+        $loan_array = array();
+        if($num != 0){
+    
+          $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+          return $row['totalPaid'];
+        }else {
+          return 0;
+        }
+    }  
+
+
+  private function getPayermembers($pershareammount){
        //build query
        $query = "SELECT * FROM ".$this->payer_table." WHERE name NOT IN ('Gloria Bulaclac')";
 
@@ -281,14 +258,25 @@ class Famloan {
         $payermember_array = array();
         if($num != 0){
                while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
+                $total_paid = $this->getTotalPayerPaid($row['id']);
+                $receivable;
+                $remaining_balance;
+                if($total_paid > $pershareammount){
+                  $receivable = $total_paid - $pershareammount;
+                  $remaining_balance = 0;
+                }else {
+                  $remaining_balance = $pershareammount - $total_paid;
+                  $receivable = 0;
+                }
 
                 $member = array(
 		            	"id" => $row['id'],
 		            	"name" => $row['name'],
 		            	"alias" =>$row['alias'],
 		            	"shared_debts" => $pershareammount,
-                  "total_paid" => $this->getTotalPayerPaid($row['id']),
-                  "remaining_balance" => $pershareammount - $this->getTotalPayerPaid($row['id'])
+                  "total_paid" => $total_paid,
+                  "remaining_balance" => $remaining_balance,
+                  'receivable' => $receivable
 
 		            );
             	array_push($payermember_array, $member);
