@@ -50,7 +50,7 @@ class Credential {
         	//get record details
         	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        	$this->extension = $row['username'];
+        	$this->username = $row['username'];
         	$this->secret = $row['secret'];
                 $this->name = $row['name'];
 
