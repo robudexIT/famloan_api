@@ -99,7 +99,9 @@ class Famloan {
              //divide by 8 family members
              $pershareammount = $result / 8;
              $payermembers = $this->getPayermembers($pershareammount);
-             echo json_encode($payermembers);
+             $data = array("total_member_loan" => $result);
+             array_push($data, $payermembers);
+             echo json_encode($data);
             }
            }else{
            echo json_encode(array("message" => "No Records Found"));
