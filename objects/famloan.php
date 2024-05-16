@@ -184,9 +184,15 @@ class Famloan {
           echo json_encode(array("message" => "The array contains non-numeric values."));
          }elseif (is_numeric($result)){
           //divide by 8 family members
-         
+          $total_mama_paid = $this->getMamaTotalPaid();
+          $total_mama_loan = $result;
+          $total_mama_balance = $total_mama_loan -  $total_mama_paid;
           $payermama = $this->get_payermama($result);
-          echo json_encode($payermama);
+          $mama_sumamary = array("total_mama_loan" => $total_mama_loan, "total_mama_paid" => $total_mama_paid, "total_mama_balance" => $total_mama_balance);
+          $data = array();
+          array_push($data, $mama_sumamary);
+          array_push($data,  $payermama);
+          echo json_encode($data);
          }
         }else{
         echo json_encode(array("message" => "No Records Found"));
@@ -317,6 +323,32 @@ class Famloan {
            return 0;
          }
   }
+
+
+  private function getMamaTotalPaid(){
+    //build query
+    $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE payer_id=1";
+
+    //prepare the query
+
+    $stmnt = $this->conn->prepare($query);
+
+      
+      
+
+      $stmnt->execute();
+
+      $num = $stmnt->rowCount();
+      $loan_array = array();
+      if($num != 0){
+  
+        $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+        return $row['totalPaid'];
+      }else {
+        return 0;
+      }
+}
+
 
   private function get_payermama($pershareammount){
     //build query
