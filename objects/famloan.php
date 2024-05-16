@@ -99,7 +99,8 @@ class Famloan {
              //divide by 8 family members
              $pershareammount = $result / 8;
              $payermembers = $this->getPayermembers($pershareammount);
-             $total_member_loan = array("total_member_loan" => $result);
+             $total_member_paid = $this->getPayerTotalPaid()
+             $total_member_loan = array("total_member_loan" => $result, "total_member_paid" => $total_member_paid, "total_member_balance" => $result - $total_member_paid);
              $data = array();
              array_push($data, $total_member_loan);
              array_push($data, $payermembers);
@@ -281,7 +282,6 @@ class Famloan {
                   "total_paid" => $total_paid,
                   "remaining_balance" => $remaining_balance,
                   "receivable" => $receivable
-
 		            );
             	array_push($payermember_array, $member);
                }
@@ -292,6 +292,30 @@ class Famloan {
         return false;
       }  
 
+  }
+
+  private function getPayerTotalPaid(){
+       //build query
+       $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE payer_id NOT IN ('1')";
+
+       //prepare the query
+ 
+       $stmnt = $this->conn->prepare($query);
+ 
+         
+         
+ 
+         $stmnt->execute();
+ 
+         $num = $stmnt->rowCount();
+         $loan_array = array();
+         if($num != 0){
+     
+           $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+           return $row['totalPaid'];
+         }else {
+           return 0;
+         }
   }
 
   private function get_payermama($pershareammount){
