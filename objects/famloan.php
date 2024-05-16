@@ -117,7 +117,8 @@ class Famloan {
                       payer.id AS payer_id, 
                       payer.name AS payer_name, payer.alias AS payer_alias, 
                       payment_breakdown.amount AS paid_amount,
-                      payment_breakdown.date AS paid_date
+                      payment_breakdown.date AS paid_date,
+                      payment_breakdown.description AS payment_description
                   FROM 
                     payer 
                   INNER JOIN 
@@ -142,7 +143,8 @@ class Famloan {
                     "name" => $row['payer_name'],
                     "alias" =>$row['payer_alias'],
                     "paid_amount" => $row['paid_amount'],
-                    "paid_date" => $row['paid_date']
+                    "paid_date" => $row['paid_date'],
+                    "description" => $row['payment_description']
 
                   );
                   array_push($payermember_array, $member);
