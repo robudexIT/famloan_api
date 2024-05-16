@@ -99,8 +99,8 @@ class Famloan {
              //divide by 8 family members
              $pershareammount = $result / 8;
              $payermembers = $this->getPayermembers($pershareammount);
-             $total_member_paid = $this->getPayerTotalPaid()
-             $total_member_loan = array("total_member_loan" => $result, "total_member_paid" => $total_member_paid, "total_member_balance" => $result - $total_member_paid);
+             $total_member_paid = $this->getPayerTotalPaid();
+             $total_member_loan = array("total_member_loan" => $result, "total_member_paid" => $total_member_paid, "total_member_balance" => ($result - $total_member_paid));
              $data = array();
              array_push($data, $total_member_loan);
              array_push($data, $payermembers);
