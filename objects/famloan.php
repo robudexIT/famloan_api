@@ -188,7 +188,7 @@ class Famloan {
           $total_mama_loan = $result;
           $total_mama_balance = $total_mama_loan -  $total_mama_paid;
           $payermama = $this->get_payermama($result);
-          $mama_sumamary = array("total_mama_loan" => $total_mama_loan, "total_mama_paid" => $total_mama_paid, "total_mama_balance" => $total_mama_balance);
+          $mama_sumamary = array("total_member_loan" => $total_mama_loan, "total_member_paid" => $total_mama_paid, "total_member_balance" => $total_mama_balance);
           $data = array();
           array_push($data, $mama_sumamary);
           array_push($data,  $payermama);
