@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 //include database and object files
 include_once '../config/database.php';
-include_once '../objects/csd.php';
+include_once '../objects/famloan.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -30,8 +30,7 @@ $famloan = new Famloan($db);
 		$date = $data->date;
 		$payer_id  = $data->payer_id;
 
-		echo $data;
-		return;
+		
 
   		if($famloan->addPayment($amount, $description, $date, $payer_id)){
 			
