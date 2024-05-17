@@ -30,6 +30,9 @@ $famloan = new Famloan($db);
 		$date = $data->date;
 		$payer_id  = $data->payer_id;
 
+		echo $data;
+		return;
+
   		if($famloan->addPayment($amount, $description, $date, $payer_id)){
 			
 			echo json_encode(array("message" => "Payment was added"));
