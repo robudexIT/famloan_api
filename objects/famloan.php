@@ -312,10 +312,9 @@ class Famloan {
                  AND description NOT LIKE '%Tito Jing%'
                  AND description NOT LIKE '%Tito Bong%'
                  AND description NOT LIKE '%Tita Dan%'
-                 AND description NOT LIKE '%Tito Bong%'
-                 AND description NOT LIKE '%Tito Ne%'
-                 AND description NOT LIKE '%Tito Bem%'
-                 AND description NOT LIKE '%Tito Ric%'     
+                 AND description NOT LIKE '%Tita Ne%'
+                 AND description NOT LIKE '%Tita Bem%'
+                 AND description NOT LIKE '%Tita Ric%'     
                  ";
        //prepare the query
  
