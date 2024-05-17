@@ -424,5 +424,33 @@ class Famloan {
       }
     }
     return array_sum($array);
-  }  
+  } 
+  
+  public function addPayment($amount, $description, $date, $payer_id) {
+    //create query
+
+    $query = " INSERT INTO " . $this->breakdown_table . " SET  amount = ?, description = ?, date = ?, payer_id = ?";
+    // prepare queery
+    $stmnt = $this->conn->prepare($query);
+
+    // sanitize
+    $amount = htmlspecialchars(strip_tags($amount));
+    $description = htmlspecialchars(strip_tags($description));
+    $date = htmlspecialchars(strip_tags($date));
+    $payer_id = htmlspecialchars(strip_tags($payer_id));
+
+    //bind values
+    $stmnt->bindParam(1, $amount);
+    $stmnt->bindParam(2, $description);
+    $stmnt->bindParam(3, $date);
+    $stmnt->bindParam(4, $payer_id);
+
+    //execute query
+    if($stmnt->execute()){
+      return true;
+    }else{
+      return false;
+    }
+
+}
 }  

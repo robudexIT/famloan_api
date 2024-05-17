@@ -19,44 +19,33 @@ $csd = new Csd($db);
   $data = json_decode(file_get_contents("php://input"));
 
   //make sure data objec are not empties 
-  if(!empty($data->extension) && !empty($data->name) && !empty($data->email) ) {
+  if(!empty($data->amount) && !empty($data->description) && !empty($data->date)  && !empty($data->payer_id)) {
 
   		//set values
-  		$csd->extension = $data->extension;
-  		$csd->username = $data->name;
-  		$csd->email = $data->email;
+  		// $csd->extension = $data->extension;
+  		// $csd->username = $data->name;
+  		// $csd->email = $data->email;
+		$amount = $data->amount;
+		$description = $data->descripton;
+		$date = $data->date;
+		$payer_id  = $data->payer_id;
 
-  		if($csd->createAgent()){
+  		if($famloan->addPayment($amount, $description, $date, $payer_id)){
 			
-			$stmnt = $csd->getCallType($csd->extension) ;
-			$num = $stmnt->rowCount(); 
-
-			if($num != 0){
-				//set response code - 201 created
-				http_response_code(201);
-	
-				echo json_encode(array("message" => "CSD--Agent was added"));
-			}else{
-				if($csd->agentCalltype()){
-					//set response code - 201 created
-					http_response_code(201);
-	
-					echo json_encode(array("message" => "CSD--Agent was added"));
-				}
-			}
+			echo json_encode(array("message" => "Payment was added"));
     		
 
   		}else{
   			//set response code to 503
   			http_response_code(503);
             
-  			echo json_encode(array("message" => "Unable to add new Agent.All fields must not empty"));
+  			echo json_encode(array("message" => "Unable to add new Payment.All fields must not empty"));
   		}
   }else{
 
   	// set response code - 400 bad request
 
-  	echo json_encode(array("message" => "Unable to add new Agent.All fields must not empty"));
+  	echo json_encode(array("message" => "Unable to add new Payment.All fields must not empty"));
   }
 
 
