@@ -275,7 +275,8 @@ class Famloan {
                 $receivable;
                 $remaining_balance;
                 if($total_paid > $pershareammount){
-                  $receivable = $total_paid - $pershareammount;
+                  $paid_receivables = $this->getRecievables($row['alias']);
+                  $receivable = $total_paid - $pershareammount - $paid_receivables;
                   $remaining_balance = 0;
                 }else {
                   $remaining_balance = $pershareammount - $total_paid;
@@ -413,6 +414,30 @@ class Famloan {
         };
         return $row['total_paid'];
 
+  }
+
+  private function getRecievables($alias){
+     //build query
+     $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE description LIKE '%$alias%')";
+
+     //prepare the query
+
+     $stmnt = $this->conn->prepare($query);
+
+       
+       
+
+       $stmnt->execute();
+
+       $num = $stmnt->rowCount();
+       $loan_array = array();
+       if($num != 0){
+   
+         $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+         return $row['totalPaid'];
+       }else {
+         return 0;
+       }
   }
 
   private function validate_and_total($array){
