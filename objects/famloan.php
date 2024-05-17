@@ -305,8 +305,18 @@ class Famloan {
 
   private function getPayerTotalPaid(){
        //build query
-       $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE payer_id NOT IN ('1')";
-
+      //  $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE payer_id NOT IN ('1')";
+       
+       $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE payer_id NOT IN ('1') 
+                 AND description NOT LIKE '%Tito R%'
+                 AND description NOT LIKE '%Tito Jing%'
+                 AND description NOT LIKE '%Tito Bong%'
+                 AND description NOT LIKE '%Tita Dan%'
+                 AND description NOT LIKE '%Tito Bong%'
+                 AND description NOT LIKE '%Tito Ne%'
+                 AND description NOT LIKE '%Tito Bem%'
+                 AND description NOT LIKE '%Tito Ric%'     
+                 ";
        //prepare the query
  
        $stmnt = $this->conn->prepare($query);
