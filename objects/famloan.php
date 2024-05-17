@@ -428,8 +428,7 @@ class Famloan {
   
   public function addPayment($amount, $description, $date, $payer_id) {
     //create query
-    echo "good";
-    return true;
+  
 
     $query = " INSERT INTO " . $this->breakdown_table . " SET  amount = ?, description = ?, date = ?, payer_id = ?";
     // prepare queery

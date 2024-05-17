@@ -14,7 +14,7 @@ include_once '../objects/csd.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$csd = new Csd($db);
+$famloan = new Famloan($db);
 //  // get posted data
   $data = json_decode(file_get_contents("php://input"));
 
