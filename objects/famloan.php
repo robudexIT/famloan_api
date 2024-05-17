@@ -275,7 +275,7 @@ class Famloan {
                 $receivable;
                 $remaining_balance;
                 if($total_paid > $pershareammount){
-                  $paid_receivables = 0 ;//$this->getRecievables($row['alias']);
+                  $paid_receivables = $this->getRecievables($row['alias']);
                   $receivable = $total_paid - $pershareammount - $paid_receivables;
                   $remaining_balance = 0;
                 }else {
@@ -428,7 +428,7 @@ class Famloan {
 
   private function getRecievables($alias){
      //build query
-     $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE description LIKE '%$alias%')";
+     $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE description LIKE '%". $alias ."%')";
 
      //prepare the query
 
