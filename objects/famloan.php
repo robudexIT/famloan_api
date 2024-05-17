@@ -454,4 +454,31 @@ class Famloan {
     }
 
 }
+
+public function addLoan($name, $amount) {
+  //create query
+ 
+   
+  $query = " INSERT INTO " . $this->loan_table . " SET  name = ?, amount = ?";
+  // prepare queery
+  $stmnt = $this->conn->prepare($query);
+
+  // sanitize
+  $name = htmlspecialchars(strip_tags($name));
+  $amount = htmlspecialchars(strip_tags($amount));
+
+
+  //bind values
+  $stmnt->bindParam(1, $name);
+  $stmnt->bindParam(2, $amount);
+
+
+  //execute query
+  if($stmnt->execute()){
+    return true;
+  }else{
+    return false;
+  }
+
+}
 }  
