@@ -428,7 +428,9 @@ class Famloan {
 
   private function getRecievables($alias){
      //build query
-     $query = "SELECT SUM(amount) AS totalPaid FROM ".$this->breakdown_table." WHERE description LIKE '%". $alias ."%')";
+    
+     $query = "SELECT SUM(amount) AS totalPaid FROM " . $this->breakdown_table . " WHERE description LIKE '%" . $alias . "%'";
+
 
      //prepare the query
 
