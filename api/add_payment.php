@@ -26,7 +26,7 @@ $famloan = new Famloan($db);
   		// $csd->username = $data->name;
   		// $csd->email = $data->email;
 		$amount = $data->amount;
-		$description = $data->descripton;
+		$description = $data->description;
 		$date = $data->date;
 		$payer_id  = $data->payer_id;
 
