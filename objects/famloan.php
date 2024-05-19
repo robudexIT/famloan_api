@@ -109,7 +109,7 @@ class Famloan {
             }
            }else{
             //return this if no loan avaiable
-            $total_member_loan = array("total_member_loan" => 0, "total_member_paid" => 0 "total_member_balance" => 0);
+            $total_member_loan = array("total_member_loan" => 0, "total_member_paid" => 0, "total_member_balance" => 0);
             $payermembers = $this->getPayermembers(0);
             array_push($data, $total_member_loan);
             array_push($data, $payermembers);
