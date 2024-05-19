@@ -285,7 +285,7 @@ class Famloan {
                 if($pershareammount == 0){
                   $total_paid = 0;
                   $receivable = 0;
-                  $remaining_balance = 0  
+                  $remaining_balance = 0  ;
                     
                 }else{
                   $total_paid = $this->getTotalPayerPaid($row['id']); 
