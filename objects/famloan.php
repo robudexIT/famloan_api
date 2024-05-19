@@ -86,6 +86,7 @@ class Famloan {
 
         $num = $stmnt->rowCount();
         $loan_array = array();
+        $data = array();
         if($num != 0){
                while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
 
@@ -101,13 +102,19 @@ class Famloan {
              $payermembers = $this->getPayermembers($pershareammount);
              $total_member_paid = $this->getPayerTotalPaid();
              $total_member_loan = array("total_member_loan" => $result, "total_member_paid" => $total_member_paid, "total_member_balance" => ($result - $total_member_paid));
-             $data = array();
+             
              array_push($data, $total_member_loan);
              array_push($data, $payermembers);
              echo json_encode($data);
             }
            }else{
-           echo json_encode(array("message" => "No Records Found"));
+            //return this if no loan avaiable
+            $total_member_loan = array("total_member_loan" => 0, "total_member_paid" => 0 "total_member_balance" => 0);
+            $payermembers = $this->getPayermembers(0);
+            array_push($data, $total_member_loan);
+            array_push($data, $payermembers);
+            echo json_encode($data);
+            
         }
 
   }  
@@ -269,20 +276,30 @@ class Famloan {
 
         $num = $stmnt->rowCount();
         $payermember_array = array();
+        $receivable;
+        $remaining_balance;
+        $total_paid;
         if($num != 0){
                while($row = $stmnt->fetch(PDO::FETCH_ASSOC)){
-                $total_paid = $this->getTotalPayerPaid($row['id']);
-                $receivable;
-                $remaining_balance;
-                if($total_paid > $pershareammount){
-                  $paid_receivables = $this->getRecievables($row['alias']);
-                  $receivable = $total_paid - $pershareammount - $paid_receivables;
-                  $remaining_balance = 0;
-                }else {
-                  $remaining_balance = $pershareammount - $total_paid;
+                
+                if($pershareammount == 0){
+                  $total_paid = 0;
                   $receivable = 0;
+                  $remaining_balance = 0  
+                    
+                }else{
+                  $total_paid = $this->getTotalPayerPaid($row['id']); 
+                  if($total_paid > $pershareammount){
+                    $paid_receivables = $this->getRecievables($row['alias']);
+                    $receivable = $total_paid - $pershareammount - $paid_receivables;
+                    $remaining_balance = 0;
+                  }else {
+                    $remaining_balance = $pershareammount - $total_paid;
+                    $receivable = 0;
+                  }
+  
                 }
-
+                
                 $member = array(
 		            	"id" => $row['id'],
 		            	"name" => $row['name'],
