@@ -290,9 +290,20 @@ class Famloan {
                 }else{
                   $total_paid = $this->getTotalPayerPaid($row['id']); 
                   if($total_paid > $pershareammount){
+                    //check the total recieve from recievabbles
                     $paid_receivables = $this->getRecievables($row['alias']);
-                    $receivable = $total_paid - $pershareammount - $paid_receivables;
-                    $remaining_balance = 0;
+                    if($total_paid == ($paid_receivables+$pershareammount)){   
+                      $receivable = 0;
+                      $remaining_balance = 0;
+             
+                    }elseif($total_paid > ($paid_receivables+$pershareammount)){
+                      $receivable = $total_paid - $pershareammount - $paid_receivables;
+                      $remaining_balance = 0;
+                    }elseif($total_paid < ($paid_receivables+$pershareammount)){
+                      $receivable = 0;
+                      $remaining_balance  =  $pershareammount + $paid_receivables - $total_paid;
+                    }
+                   
                   }else {
                     $remaining_balance = $pershareammount - $total_paid;
                     $receivable = 0;
