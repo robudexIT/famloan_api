@@ -73,7 +73,7 @@ class Famloan {
   public function getPayerBreakdownSummary(){
        //build query
 
-       $query = "SELECT amount FROM ".$this->loan_table." WHERE name NOT IN ('Geda','Carloan')";
+       $query = "SELECT amount FROM ".$this->loan_table." WHERE name NOT IN ('Geda')";
 
        //prepare the query
 
